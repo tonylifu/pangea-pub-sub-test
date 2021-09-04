@@ -13,7 +13,8 @@ public class SubscribeServerController {
     private static final Logger LOG = LoggerFactory.getLogger(SubscribeServerController.class);
 
     @RequestMapping(value = "/test1", method = RequestMethod.POST,
-            consumes= MediaType.APPLICATION_JSON_VALUE)
+            produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.ALL_VALUE},
+            consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.ALL_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> test1(@RequestBody String publishRequest) {
         LOG.info("\n\nPublished<TEST1> Request:\n{}\n\n", publishRequest);
@@ -23,7 +24,7 @@ public class SubscribeServerController {
     }
 
     @RequestMapping(value = "/test2", method = RequestMethod.POST,
-            produces={"application/json","application/xml"}, consumes="text/html")
+            produces=MediaType.ALL_VALUE, consumes=MediaType.ALL_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> test2(@RequestBody String publishRequest) {
         LOG.info("\n\nPublished<TEST2> Request:\n{}\n\n", publishRequest);

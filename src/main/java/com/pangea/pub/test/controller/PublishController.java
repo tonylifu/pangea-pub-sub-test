@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,14 +27,14 @@ public class PublishController {
         this.jmsService = jmsService;
     }
 
-    @PostMapping("/{topic}")
+    @RequestMapping(value = "/{topic}", method = RequestMethod.POST,
+            produces= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.ALL_VALUE},
+            consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.ALL_VALUE})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> publish(@PathVariable String topic, @RequestBody Object requestData) {
         LOG.info("\n\nPublish RequestData:\n{}\n\n", requestData);
         PublishRequest publishRequest = getPublishRequest(topic, requestData);
         LOG.info("\n\nPublish Request:\n{}\n\n", publishRequest);
-        //publishService.publishToTopic(topic, publishRequest);
-        //jmsService.jmsServiceSendToTopicOne(topic, publishRequest);
         publishToTopic(topic, publishRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
